@@ -45,7 +45,7 @@ namespace CPU_Scheduler.Classes
         public void writeResultFile(Processor processor, Task task)
         {
         
-            string json = "/home/tala/Documents/Tala_C#/CPU_Scheduler/.vscode/results.json";
+            string json = ".vscode/results.json";
             string Presults = JsonSerializer.Serialize<Processor>(processor);
             var Tresults = JsonSerializer.Serialize<Task>(task);
             Console.WriteLine(Presults + Tresults);

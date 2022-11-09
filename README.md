@@ -1,0 +1,1 @@
+![image](CPU_scheduler.drawio(1).png)
