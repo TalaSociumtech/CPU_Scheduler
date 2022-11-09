@@ -45,7 +45,7 @@ namespace CPU_Scheduler.Classes
         public void writeResultFile(Processor processor, Task task)
         {
         
-            string json = "obj/JsonFiles/results.json";
+            string json = "JsonFiles/results.json";
             string Presults = JsonSerializer.Serialize<Processor>(processor);
             var Tresults = JsonSerializer.Serialize<Task>(task);
             Console.WriteLine(Presults + Tresults);

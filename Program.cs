@@ -1,5 +1,5 @@
-﻿string processorfilepath = "obj/JsonFiles/ProcessorsFile.json";
-string taskfilepath = "obj/JsonFiles/tasksFile.json";
+﻿string processorfilepath = "JsonFiles/ProcessorsFile.json";
+string taskfilepath = "JsonFiles/tasksFile.json";
 CPU_Scheduler.Classes.ShcedulerSJF scheduler1 = new CPU_Scheduler.Classes.ShcedulerSJF();
 scheduler1.readProcessorFile(processorfilepath);
 scheduler1.readTaskFile(taskfilepath);
