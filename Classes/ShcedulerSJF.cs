@@ -6,7 +6,6 @@ using System.Text.Json.Serialization;
 using System.IO;
 using System.Threading;
 using System.Timers;
-//using Newtonsoft.Json;
 
 namespace CPU_Scheduler.Classes
 {
@@ -42,21 +41,13 @@ namespace CPU_Scheduler.Classes
             taskList.Sort();
         }
 
-        public void writeResultFile(Processor processor, Task task)
+        public void writeResultFile()
         {
-        
+
             string json = "JsonFiles/results.json";
-            string Presults = JsonSerializer.Serialize<Processor>(processor);
-            var Tresults = JsonSerializer.Serialize<Task>(task);
-            Console.WriteLine(Presults + Tresults);
+             var Tresults = JsonSerializer.Serialize<List<Task>>(taskList);
             StreamWriter wr = new StreamWriter(json);
-           // wr.Write("In clockcycle" + clockcycle+ ":");
-            if(task==null){
-                wr.Write("[" + Presults+ "]");
-            }else{
-                wr.Write("["+ Presults + "," + Tresults +"]");
-            }
-            
+            wr.Write(Tresults);
             wr.Close();
             
         
@@ -80,13 +71,17 @@ namespace CPU_Scheduler.Classes
         {
        sortTask();
         int count =0;
+        string Presults=" ";
+        string Tresults=" ";
+        string results = " ";
        while(true)
        {
-        Console.WriteLine("In ClockCycle " + clockcycle + " : {");
         taskEnqueue();
-      
+         
+        
+        Processor processor = new Processor();
         foreach(var item in processorList)
-        { 
+        {       
                 //Put waiting task in available processor, update Processor -> Busy, update task state -> Executing 
            if(item.state.Equals(CPU_Scheduler.Enums.ProcessorState.Idle.ToString()) && taskQueue.Count!=0){
                     item.task = taskQueue.Dequeue();
@@ -120,28 +115,21 @@ namespace CPU_Scheduler.Classes
                 item.task.taskProcessingTime+=1;
                 item.task.waitingTime = clockcycle - item.task.creationalTime;
             }
-
-               //Write the results of this clockcycle
-            writeResultFile(item, item.task);
-            Console.Write("}");
-            Console.WriteLine();
-
              if(taskQueue.Count == 0 && processorList.Where(x=>x.state.Equals(CPU_Scheduler.Enums.ProcessorState.Idle)).Equals(0) ){
             
                 break;
             }
 
+               
         }
-        Console.WriteLine("----------------------------------------------------------");
-        Console.WriteLine();
-
+        
        clockcycle++;
        if(taskList.Count == count){
         break;
        } 
-       
+      
         }
-
+ writeResultFile();
 
     }
 
