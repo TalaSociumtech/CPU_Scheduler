@@ -7,7 +7,7 @@ namespace CPU_Scheduler.Interfaces
 {
     public interface IScheduler
     {
-        public void sortTask();
+       public List<CPU_Scheduler.Classes.Task> execution(List<CPU_Scheduler.Classes.Processor> processorList, List<CPU_Scheduler.Classes.Task> taskList);
        
     }
 }

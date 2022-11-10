@@ -6,116 +6,75 @@ using System.Text.Json.Serialization;
 using System.IO;
 using System.Threading;
 using System.Timers;
+using CPU_Scheduler.Enums;
 
 namespace CPU_Scheduler.Classes
 {
 
     public class ShcedulerSJF : Interfaces.IScheduler
     {
-        List<Processor>? processorList = new List<Processor>();
-        List<Task>? taskList = new List<Task>();
-        PriorityQueue<Task?, string> taskQueue = new PriorityQueue<Task?, string>();
-       
-
+        List<Task>? completedTask = new List<Task>();
+        PriorityQueue<Task, int> taskQueue = new PriorityQueue<Task, int>();
         int clockcycle = 0;
         public ShcedulerSJF(){}
 
         string? strtesult=null;
-
-        Processor processor = new Processor();
-        public void readProcessorFile(string path){
-           StreamReader sr = new StreamReader(path);
-            strtesult = sr.ReadToEnd();
-            sr.Close();
-
-            processorList.AddRange((List<Processor>)JsonSerializer.Deserialize(strtesult, typeof(List<Processor>))); 
-           
-        }
-
-        public void readTaskFile(string path){
-
-            StreamReader sr = new StreamReader(path);
-            strtesult = sr.ReadToEnd();
-            sr.Close();
-            taskList.AddRange((List<Task>)JsonSerializer.Deserialize(strtesult, typeof(List<Task>)));
-            taskList.Sort();
-        }
-
-        public void writeResultFile()
-        {
-
-            string json = "JsonFiles/results.json";
-             var Tresults = JsonSerializer.Serialize<List<Task>>(taskList);
-            StreamWriter wr = new StreamWriter(json);
-            wr.Write(Tresults);
-            wr.Close();
-            
-        
-        }
-    
-        public void sortTask()
-        { 
-            taskList.Sort();
-            
-        }
-        public void taskEnqueue(){
+        public void taskEnqueue(List<Task> taskList){
             foreach(var item in taskList.ToList())
         {
             if(item.creationalTime == clockcycle){
-                taskQueue.Enqueue(item, item.priority);
-               
+                taskQueue.Enqueue(item, (int)item.priority);
+               taskList.Remove(item);
             }
         }
         }
-        public void execution()
+        public List<Task> execution (List<Processor> processorList, List<Task> taskList)
         {
-       sortTask();
-        int count =0;
-        string Presults=" ";
-        string Tresults=" ";
-        string results = " ";
+            int count =taskList.Count();
        while(true)
        {
-        taskEnqueue();
+        taskEnqueue(taskList);
          
         
-        Processor processor = new Processor();
+       
         foreach(var item in processorList)
         {       
                 //Put waiting task in available processor, update Processor -> Busy, update task state -> Executing 
-           if(item.state.Equals(CPU_Scheduler.Enums.ProcessorState.Idle.ToString()) && taskQueue.Count!=0){
+           if(item.state.Equals(ProcessorState.Idle) && taskQueue.Count!=0){
                     item.task = taskQueue.Dequeue();
-                        item.state = CPU_Scheduler.Enums.ProcessorState.Busy.ToString();
-                         item.task.tState = CPU_Scheduler.Enums.TaskState.Executing.ToString();
+                        item.state =  ProcessorState.Busy;
+                        item.task.tState = TaskState.Executing;
 
                 //Replace 'Low' task with 'High' task, update 'low' task state -> waiting, updating 'High' task state -> Executing   
-            } else if(item.state.Equals(CPU_Scheduler.Enums.ProcessorState.Busy.ToString())&&
-                item.task.priority.Equals(CPU_Scheduler.Enums.TaskPriority.Low.ToString()) && taskQueue.Count!=0 ){
-                if(taskQueue.Peek().priority == "High" ){
-                    taskQueue.Enqueue(item.task, item.task.priority);
-                    item.task.tState = CPU_Scheduler.Enums.TaskState.Waiting.ToString();
+            } else if(item.state.Equals(ProcessorState.Busy)&&
+                item.task.priority.Equals(TaskPriority.Low) && taskQueue.Count!=0 ){
+                if(taskQueue.Peek().priority.Equals(TaskPriority.High) ){
+                    taskQueue.Enqueue(item.task, (int)item.task.priority);
+                    item.task.tState = TaskState.Waiting;
                     item.task = taskQueue.Dequeue();
-                    item.task.tState = CPU_Scheduler.Enums.TaskState.Executing.ToString();
+                    item.task.tState = TaskState.Executing;
                 } 
             }
             
-                //In case of Task complete : Update task state -> completed, processor -> Idle, get Completiong time and Waiting time
-            if( item.state.Equals(CPU_Scheduler.Enums.ProcessorState.Busy.ToString()) && item.task.taskProcessingTime ==item.task.requestedTime)
+                //In case of Task complete : Update task state -> completedcount--;, processor -> Idle, get Completiong time and Waiting time
+            if( item.state.Equals(ProcessorState.Busy) && item.task.taskProcessingTime ==item.task.requestedTime)
             {
-                item.state = (CPU_Scheduler.Enums.ProcessorState.Idle).ToString();
-                item.task.tState = (CPU_Scheduler.Enums.TaskState.Completed).ToString();
+                item.state = ProcessorState.Idle;
+                item.task.tState = TaskState.Completed;
                 item.task.completionTime = clockcycle;
                 item.task.waitingTime = item.task.completionTime - item.task.creationalTime;
+                completedTask.Add(item.task);
                 item.task=null;
-                count++;
+
+                
                 
 
                 //In case of Task !complete : increase Processing time, Update waiting time
-            } else if(item.state.Equals(CPU_Scheduler.Enums.ProcessorState.Busy.ToString()) && item.task.taskProcessingTime !=item.task.requestedTime){
+            } else if(item.state.Equals(ProcessorState.Busy) && item.task.taskProcessingTime !=item.task.requestedTime){
                 item.task.taskProcessingTime+=1;
                 item.task.waitingTime = clockcycle - item.task.creationalTime;
             }
-             if(taskQueue.Count == 0 && processorList.Where(x=>x.state.Equals(CPU_Scheduler.Enums.ProcessorState.Idle)).Equals(0) ){
+             if(taskQueue.Count == 0 && processorList.Where(x=>x.state.Equals(ProcessorState.Idle)).Equals(0) ){
             
                 break;
             }
@@ -124,16 +83,16 @@ namespace CPU_Scheduler.Classes
         }
         
        clockcycle++;
-       if(taskList.Count == count){
+       if(taskList.Count == 0 && completedTask.Count==count){
         break;
        } 
       
         }
- writeResultFile();
+      
+      return completedTask;
 
     }
 
-       
-    
+        
     }
 }
