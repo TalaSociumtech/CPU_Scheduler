@@ -2,22 +2,14 @@ using Xunit;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.IO;
+using CPU_Scheduler.Classes;
 public class TestClass{
-   /*public void TestProcessorsReadFile(){
+  /* public void TestProcessorsReadFile(){
+    ReadWrite pathReader = new ReadWrite();
     string path = "JsonFiles/ProcessorsFile.json";
-    string tasksPath = "JsonFiles/tasksFile.json";
-    StreamReader sr = new StreamReader(path);
-    string strtesult = sr.ReadToEnd();
-    sr.Close();
-    if(strtesult.Length != null && strtesult.Length > 0)
-    {
-        Assert.True(true);
-    }
 
-    else{
-        //throw NullReferenceException;
-    }
-
-
+    var actual = pathReader.readProcessorFile(path, )
+   
+    Assert
    } */
 }

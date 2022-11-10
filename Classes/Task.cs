@@ -23,7 +23,7 @@ namespace CPU_Scheduler.Classes
         public Task(){
             waitingTime =0;
             completionTime = 0;
-            taskProcessingTime = requestedTime;
+            taskProcessingTime = 0;
         }
 
         public int CompareTo(Task? other)
