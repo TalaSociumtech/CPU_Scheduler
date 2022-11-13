@@ -94,9 +94,9 @@ public class TestClass
     ShcedulerSJF shceduler1 = new ShcedulerSJF();
     mockCompletedTask = shceduler1.execution(mockProcessorList, mockTaskList);
 
-    int waitinTime = mockCompletedTask[0].waitingTime;
+    int waitingTime = mockCompletedTask[0].waitingTime;
     int expectedTime = mockCompletedTask[0].completionTime - mockCompletedTask[0].creationalTime;
-    Assert.Equal(expectedTime, waitinTime);
+    Assert.Equal(expectedTime, waitingTime);
 
    }
 }

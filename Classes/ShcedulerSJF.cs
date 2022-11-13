@@ -17,8 +17,6 @@ namespace CPU_Scheduler.Classes
         PriorityQueue<Task, int> taskQueue = new PriorityQueue<Task, int>();
         int clockcycle = 0;
         public ShcedulerSJF(){}
-
-        string? strtesult=null;
         public void taskEnqueue(List<Task> taskList){
             foreach(var item in taskList.ToList())
         {
