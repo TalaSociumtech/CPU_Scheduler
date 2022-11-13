@@ -56,7 +56,7 @@ namespace CPU_Scheduler.Classes
                 } 
             }
             
-                //In case of Task complete : Update task state -> completedcount--;, processor -> Idle, get Completiong time and Waiting time
+                //In case of Task complete : Update task state -> completed, processor -> Idle, get Completion time and Waiting time
             if( item.state.Equals(ProcessorState.Busy) && item.task.taskProcessingTime ==item.task.requestedTime)
             {
                 item.state = ProcessorState.Idle;

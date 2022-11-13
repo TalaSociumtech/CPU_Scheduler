@@ -21,6 +21,7 @@ namespace CPU_Scheduler.Classes
         
        
         public Task(){
+           
             waitingTime =0;
             completionTime = 0;
             taskProcessingTime = 0;
