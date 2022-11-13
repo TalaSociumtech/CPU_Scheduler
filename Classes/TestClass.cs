@@ -13,7 +13,7 @@ public class TestClass
     
 
     [Fact]
-    public void TestProcessorsReadFile(){
+    public void TestReadProcessorFile(){
     
     ReadWrite pathReader = new ReadWrite();
     string path = "ProcessorsFile.json";
@@ -23,7 +23,7 @@ public class TestClass
     }
   
 [Fact]
-  public void TestTaskReadFile(){
+  public void TestReadTaskFile(){
 
     ReadWrite pathReader = new ReadWrite();
     string path = "tasksFile.json";
@@ -33,7 +33,7 @@ public class TestClass
    } 
 
    [Fact]
-   public void TestCompletedTaskNotEmpty(){
+   public void TestWriteResultFile(){
 
        ReadWrite pathReader1 = new ReadWrite();
     string path1 = "ProcessorsFile.json";
