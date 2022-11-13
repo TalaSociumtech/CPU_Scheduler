@@ -47,36 +47,11 @@ public class TestClass
     mockCompletedTask = shceduler1.execution(mockProcessorList, mockTaskList);
     Assert.NotEmpty(mockCompletedTask);
    } 
-
+   
    [Fact]
-    public void TestCompletionTime(){
-    Processor processor = new Processor();
-    processor.pId = "p2";
-    processor.state = ProcessorState.Idle;
-    
-    CPU_Scheduler.Classes.Task task = new CPU_Scheduler.Classes.Task();
-    task.tId = "t1";
-    task.requestedTime = 5;
-    task.creationalTime = 3;
-    task.tState = TaskState.Waiting;
-    task.priority = TaskPriority.High;
+   public void TestExecution(){
 
-    mockProcessorList.Add(processor);
-    mockTaskList.Add(task);
-
-
-    ShcedulerSJF shceduler1 = new ShcedulerSJF();
-    mockCompletedTask = shceduler1.execution(mockProcessorList, mockTaskList);
-
-    int completionTime = mockCompletedTask[0].completionTime;
-    Assert.Equal(8, completionTime);
-    
-   }
-
-   [Fact]
-    public void TestWaitingTime(){
-
-      Processor processor = new Processor();
+Processor processor = new Processor();
     processor.pId = "p2";
     processor.state = ProcessorState.Idle;
     
@@ -97,6 +72,10 @@ public class TestClass
     int waitingTime = mockCompletedTask[0].waitingTime;
     int expectedTime = mockCompletedTask[0].completionTime - mockCompletedTask[0].creationalTime;
     Assert.Equal(expectedTime, waitingTime);
+
+    int completionTime = mockCompletedTask[0].completionTime;
+    Assert.Equal(8, completionTime);
+
 
    }
 }
