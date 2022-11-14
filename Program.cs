@@ -7,10 +7,11 @@
 
 string processorfilepath = "JsonFiles/ProcessorsFile.json";
 string taskfilepath = "JsonFiles/tasksFile.json";
+string resultFilePath = "JsonFiles/results.json";
 ShcedulerSJF scheduler1 = new  ShcedulerSJF();
 ReadWrite rw = new ReadWrite();
 
 processorList = rw.readProcessorFile(processorfilepath, processorList);
 taskList = rw.readTaskFile(taskfilepath, taskList);
 completedTask = scheduler1.execution (processorList, taskList);
-rw.writeResultFile(completedTask);
+rw.writeResultFile(resultFilePath,completedTask);

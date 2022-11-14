@@ -36,12 +36,10 @@ namespace CPU_Scheduler.Classes
             return taskList;
         }
 
-        public void writeResultFile( List<Task> completedTask )
+        public void writeResultFile( string path ,List<Task> completedTask )
         {
-
-             string json = "JsonFiles/results.json";
              var Tresults = JsonSerializer.Serialize<List<Task>>(completedTask);
-            StreamWriter wr = new StreamWriter(json);
+            StreamWriter wr = new StreamWriter(path);
             wr.Write(Tresults);
             wr.Close();
             

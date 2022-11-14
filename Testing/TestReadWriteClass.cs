@@ -35,17 +35,20 @@ public class TestReadWriteClass
    [Fact]
    public void TestWriteResultFile(){
 
-       ReadWrite pathReader1 = new ReadWrite();
-    string path1 = "ProcessorsFile.json";
-    mockProcessorList= pathReader1.readProcessorFile(path1, mockProcessorList);
-
-    ReadWrite pathReader2 = new ReadWrite();
-    string path2 = "tasksFile.json";
-    mockTaskList=pathReader2.readTaskFile(path2, mockTaskList);
-
-    ShcedulerSJF shceduler1 = new ShcedulerSJF();
-    mockCompletedTask = shceduler1.execution(mockProcessorList, mockTaskList);
-    Assert.NotEmpty(mockCompletedTask);
+      CPU_Scheduler.Classes.Task task = new CPU_Scheduler.Classes.Task();
+    task.tId = "t1";
+    task.requestedTime = 5;
+    task.creationalTime = 3;
+    task.completionTime = 8;
+    task.waitingTime = 5;
+    task.tState = TaskState.Completed;
+    task.priority = TaskPriority.High;
+     mockCompletedTask.Add(task);
+     ReadWrite resultReader = new ReadWrite();
+     string path = "results.json";
+    resultReader.writeResultFile(path, mockCompletedTask);
+    mockTaskList=resultReader.readTaskFile(path, mockTaskList);
+    Assert.NotEmpty(mockTaskList);
    } 
    
   
